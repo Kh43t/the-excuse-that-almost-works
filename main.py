@@ -39,6 +39,13 @@ def main() -> None:
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as handle:
         handle.write(EXCUSE + "\n")
+    os.chmod("/output/entry.txt", 0o644)
+
+    # Read-back verify: what landed on disk must be exactly the excuse.
+    with open("/output/entry.txt", encoding="utf-8") as handle:
+        written = handle.read()
+    if written != EXCUSE + "\n":
+        raise SystemExit("read-back mismatch: entry.txt does not match EXCUSE")
 
 
 if __name__ == "__main__":
